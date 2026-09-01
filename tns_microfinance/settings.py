@@ -90,23 +90,15 @@ WSGI_APPLICATION = 'tns_microfinance.wsgi.application'
 DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
 
 if DATABASE_URL:
-    try:
-        import dj_database_url
-        DATABASES = {
-            'default': dj_database_url.parse(
-                DATABASE_URL,
-                conn_max_age=600,
-                conn_health_checks=True,
-                ssl_require=True,
-            )
-        }
-    except Exception:
-        DATABASES = {
-            'default': {
-                'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': Path('/tmp') / 'db.sqlite3' if os.environ.get('VERCEL') else BASE_DIR / 'db.sqlite3',
-            }
-        }
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
+    }
 else:
     DATABASES = {
         'default': {
