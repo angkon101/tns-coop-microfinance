@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static humanize %}
+
+{% block title %}Add Money Online - SSLCOMMERZ Gateway{% endblock %}
+{% block page_title %}Add Money Online{% endblock %}
+{% block page_subtitle %}Instant secure savings deposit via SSLCOMMERZ Payment Gateway{% endblock %}
+
+{% block content %}
+<div style="max-width: 580px; margin: 0 auto;">
+
+  <!-- Deposit Form Card -->
+  <div class="content-card">
+    <div class="card-header">
+      <div class="card-title">Enter Deposit Amount</div>
+      <div style="font-size: 0.8rem; color: #64748b;">A/C: {{ account.account_number }}</div>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{% url 'savings:add_money_online' %}">
+        {% csrf_token %}
+
+        <!-- Custom Amount Input -->
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label class="form-label">Deposit Amount (BDT) *</label>
+          <div style="position: relative;">
+            <input type="number" step="0.01" min="50" max="500000" name="amount" id="depositAmountInput" class="form-control" placeholder="e.g. 1000.00" value="1000.00" required style="font-size: 1.25rem; font-weight: 700; padding-right: 60px;">
+            <span style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #64748b;">BDT</span>
+          </div>
+          <div style="font-size: 0.75rem; color: #64748b; margin-top: 6px;">
+            Min: 50 BDT &bull; Max: 500,000 BDT per transaction. Instant credit upon gateway authorization.
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;">
+          <a href="{% url 'savings:my_savings' %}" class="btn btn-secondary">
+            &larr; Cancel
+          </a>
+          <button type="submit" class="btn btn-primary" style="padding: 0.75rem 2rem; font-size: 1rem; font-weight: 700;">
+            Proceed to SSLCOMMERZ Checkout &rarr;
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
