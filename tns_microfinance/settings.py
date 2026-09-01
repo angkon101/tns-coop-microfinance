@@ -87,25 +87,33 @@ TEMPLATES = [
 WSGI_APPLICATION = 'tns_microfinance.wsgi.application'
 
 # Database Configuration (Supports PostgreSQL / Neon / Supabase via DATABASE_URL or SQLite)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 DATABASE_URL = os.environ.get('DATABASE_URL')
+
 if DATABASE_URL:
     try:
         import dj_database_url
-        DATABASES['default'] = dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
-            ssl_require=True,
-        )
-    except ImportError:
-        pass
+        DATABASES = {
+            'default': dj_database_url.config(
+                default=DATABASE_URL,
+                conn_max_age=600,
+                conn_health_checks=True,
+                ssl_require=True,
+            )
+        }
+    except Exception:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': Path('/tmp') / 'db.sqlite3' if os.environ.get('VERCEL') else BASE_DIR / 'db.sqlite3',
+            }
+        }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': Path('/tmp') / 'db.sqlite3' if os.environ.get('VERCEL') else BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.CustomUser'
